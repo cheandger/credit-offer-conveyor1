@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="conveyor-api" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="conveyor-api" target="17" />
+      <module name="conveyor_api" target="17" />
+      <module name="conveyor_MC" target="17" />
+      <module name="deal_MC" target="17" />
+      <module name="deal_mc" target="17" />
+      <module name="сredit-offer-сonveyor" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="conveyor-api" options="" />
+      <module name="deal_MC" options="" />
+    </option>
+  </component>
+</project>

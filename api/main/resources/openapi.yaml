@@ -1,0 +1,364 @@
+openapi: 3.0.1
+info:
+  title: Conveyior API
+  version: 0.0.1
+servers:
+- url: /
+tags:
+- name: offers
+- name: calculation
+paths:
+  /conveyor-api/offers:
+    post:
+      operationId: List of LoanOfferDTO
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoanApplicationRequestDTO'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/LoanOfferDTO'
+                type: array
+          description: Ok. Successful offer response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: invalid params
+      summary: The LoanOfferVariations calculation
+      tags:
+      - offers
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: offers
+  /conveyor-api/calculation:
+    post:
+      operationId: loanVariations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScoringDataDTO'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditDTO'
+          description: Successful calculation response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: invalid params
+      summary: The calculation of loan variations
+      tags:
+      - calculation
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: calculation
+components:
+  schemas:
+    LoanOfferDTO:
+      description: DTO object that contains different vars of LoanOffer
+      example:
+        totalAmount: 1.4658129805029452
+        isSalaryClient: true
+        monthlyPayment: 5.637376656633329
+        rate: 2.3021358869347655
+        requestedAmount: 6.027456183070403
+        term: 5
+        applicationId: 0
+        isInsuranceEnabled: true
+      properties:
+        applicationId:
+          format: int64
+          type: integer
+        requestedAmount:
+          type: number
+        totalAmount:
+          type: number
+        term:
+          type: integer
+        monthlyPayment:
+          type: number
+        rate:
+          type: number
+        isInsuranceEnabled:
+          type: boolean
+        isSalaryClient:
+          type: boolean
+      type: object
+    LoanApplicationRequestDTO:
+      example:
+        passportNumber: passportNumber
+        firstName: firstName
+        lastName: lastName
+        amount: 10000.080082819046
+        birthdate: 2000-12-05T00:00:00.000+00:00
+        term: 6
+        middleName: middleName
+        passportSeries: passportSeries
+        email: email
+      properties:
+        amount:
+          minimum: 10000
+          type: number
+        term:
+          minimum: 6
+          type: integer
+        firstName:
+          pattern: "[a-zA-Zа-яА-Я]{2,30}"
+          type: string
+        lastName:
+          pattern: "[a-zA-Zа-яА-Я]{2,30}"
+          type: string
+        middleName:
+          pattern: "[a-zA-Zа-яА-Я]{2,30}"
+          type: string
+        email:
+          format: email
+          pattern: "[\\w\\.]{2,50}@[\\w\\.]{2,20}"
+          type: string
+        birthdate:
+          example: 2000-12-05
+          format: date
+          pattern: "\d([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))"
+          type: string
+        passportSeries:
+          pattern: "\\d{4}"
+          type: string
+        passportNumber:
+          pattern: "\\d{6}"
+          type: string
+      required:
+      - amount
+      - birthdate
+      - email
+      - firstName
+      - lastName
+      - passportNumber
+      - passportSeries
+      - term
+      type: object
+    CreditDTO:
+      example:
+        amount: 10000.080082819046
+        isSalaryClient: true
+        monthlyPayment: 1.4658129805029452
+        rate: 5.962133916683182
+        paymentSchedule:
+        - date: 2000-01-23
+          interestPayment: 9.301444243932576
+          number: 2
+          totalPayment: 7.061401241503109
+          debtPayment: 3.616076749251911
+          remainingDebt: 2.027123023002322
+        - date: 2000-01-23
+          interestPayment: 9.301444243932576
+          number: 2
+          totalPayment: 7.061401241503109
+          debtPayment: 3.616076749251911
+          remainingDebt: 2.027123023002322
+        psk: 5.637376656633329
+        term: 6
+        isInsuranceEnabled: true
+      properties:
+        amount:
+          minimum: 10000
+          type: number
+        term:
+          minimum: 6
+          type: integer
+        monthlyPayment:
+          type: number
+        rate:
+          type: number
+        psk:
+          type: number
+        isInsuranceEnabled:
+          type: boolean
+        isSalaryClient:
+          type: boolean
+        paymentSchedule:
+          items:
+            $ref: '#/components/schemas/PaymentScheduleElement'
+          type: array
+      type: object
+    ScoringDataDTO:
+      example:
+        passportNumber: passportNumber
+        lastName: lastName
+        amount: 10000.080082819046
+        birthdate: 2000-01-23
+        gender: MALE
+        passportIssueBranch: passportIssueBranch
+        employment:
+        - workExperienceCurrent: 2
+          position: WORKER
+          workExperienceTotal: 5
+          employmentStatus: UNEMPLOYED
+          salary: 5.962133916683182
+          employerINN: employerINN
+        - workExperienceCurrent: 2
+          position: WORKER
+          workExperienceTotal: 5
+          employmentStatus: UNEMPLOYED
+          salary: 5.962133916683182
+          employerINN: employerINN
+        passportSeries: passportSeries
+        dependentAmount: 1
+        firstName: firstName
+        isSalaryClient: true
+        term: 6
+        middleName: middleName
+        passportIssueDate: 2000-01-23
+        maritalStatus: MARRIED
+        account: account
+        isInsuranceEnabled: true
+      properties:
+        amount:
+          minimum: 10000
+          type: number
+        term:
+          minimum: 6
+          type: integer
+        firstName:
+          pattern: "[a-zA-Zа-яА-Я]{2,30}"
+          type: string
+        lastName:
+          pattern: "[a-zA-Zа-яА-Я]{2,30}"
+          type: string
+        middleName:
+          pattern: "[a-zA-Zа-яА-Я]{2,30}"
+          type: string
+        gender:
+          enum:
+          - MALE
+          - FEMALE
+          - NON_BINARY
+          type: string
+        birthdate:
+          format: date
+          type: string
+        passportSeries:
+          pattern: "\\d{4}"
+          type: string
+        passportNumber:
+          pattern: "\\d{6}"
+          type: string
+        passportIssueDate:
+          format: date
+          type: string
+        passportIssueBranch:
+          type: string
+        maritalStatus:
+          enum:
+          - MARRIED
+          - DIVORCED
+          - SINGLE
+          - WIDOW_WIDOWER
+          type: string
+        dependentAmount:
+          type: integer
+        employment:
+          items:
+            $ref: '#/components/schemas/EmploymentDTO'
+          type: array
+        account:
+          type: string
+        isInsuranceEnabled:
+          type: boolean
+        isSalaryClient:
+          type: boolean
+      required:
+      - account
+      - amount
+      - birthdate
+      - dependentAmount
+      - employment
+      - firstName
+      - gender
+      - isInsuranceEnabled
+      - isSalaryClient
+      - lastName
+      - maritalStatus
+      - passportIssueBranch
+      - passportIssueDate
+      - passportNumber
+      - passportSeries
+      - term
+      type: object
+    EmploymentDTO:
+      example:
+        workExperienceCurrent: 2
+        position: WORKER
+        workExperienceTotal: 5
+        employmentStatus: UNEMPLOYED
+        salary: 5.962133916683182
+        employerINN: employerINN
+      properties:
+        employmentStatus:
+          enum:
+          - UNEMPLOYED
+          - SELF_EMPLOYED
+          - EMPLOYED
+          - BUSSINESS_OWNER
+          type: string
+        employerINN:
+          format: int64
+          pattern: "\\d{10}"
+          type: string
+        salary:
+          type: number
+        position:
+          enum:
+          - WORKER
+          - MID_MANAGER
+          - TOP_MANAGER
+          - OWNER
+          type: string
+        workExperienceTotal:
+          type: integer
+        workExperienceCurrent:
+          type: integer
+      type: object
+    PaymentScheduleElement:
+      example:
+        date: 2000-01-23
+        interestPayment: 9.301444243932576
+        number: 2
+        totalPayment: 7.061401241503109
+        debtPayment: 3.616076749251911
+        remainingDebt: 2.027123023002322
+      properties:
+        number:
+          type: integer
+        date:
+          format: date
+          type: string
+        totalPayment:
+          type: number
+        interestPayment:
+          type: number
+        debtPayment:
+          type: number
+        remainingDebt:
+          type: number
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
